@@ -1,0 +1,24 @@
+<?php
+
+
+
+class InfoBel_IT extends superfecta_base {
+
+	public $description = "Ricerca Italiana http://www.infobel.com/it <br>CID must include area code with the leading 0.";
+	public $version_requirement = "2.11";
+
+	function get_caller_id($thenumber, $run_param=array()) {
+
+		$this->DebugPrint("Searching http://www.infobel.com for number: $thenumber");
+
+		$url = "http://www.infobel.com/it/italy/Inverse.aspx?q=Italy";
+		$url = $url . "&qPhone=" . $thenumber. "&qSelLang3=&SubmitREV=Zoek&inphCoordType=EPSG";
+		
+		$pattern = '=<span.class\=\"fn org"[^>]*>(.*)</span>=siU'; //"/<h2 class\=\"rgs\"[^>]*>(.*)<\/h2>/";
+		if ($this->SearchURL($url, $pattern, $match)) {
+			$caller_id = $this->ExtractMatch($match);
+		}
+	return($caller_id);
+	}
+
+}
